@@ -11,7 +11,6 @@ public class Main {
         String nose, tail;
         int row1 = 0, col1 = 0, row2 = 0, col2 = 0;
         boolean correct = false;
-
         makeField(field);
         printField(field);
 
@@ -33,6 +32,22 @@ public class Main {
             fillField(field, row1, col1, row2, col2);
             printField(field);
         }
+        System.out.println("\nThe game starts!\n");
+        printField(field);
+        System.out.println("\nTake a shot!\n");
+        String shot = sc.next();
+        int rowShot = stringToInt(shot);
+        int colShot = Integer.parseInt(shot.substring(1));
+
+        while (shot.matches("[K-Z].") || colShot > 10) {
+            System.out.println("\nError! You entered the wrong coordinates! Try again:\n");
+            shot = sc.next();
+            rowShot = stringToInt(shot);
+            colShot = Integer.parseInt(shot.substring(1));
+        }
+        fillShot(field, rowShot, colShot);
+        printField(field);
+        System.out.println(field[rowShot - 1][colShot - 1].equals(" X") ? "\nYou hit a ship!" : "\nYou missed!");
     }
 
     public static int stringToInt(String s) {
@@ -57,6 +72,20 @@ public class Main {
                         && i >= Math.min(row1, row2) - 1
                         && i <= Math.max(row1, row2) - 1) {
                     str[i][j] = " O";
+                }
+            }
+        }
+        return str;
+    }
+    public static String[][] fillShot(String[][] str, int rShot, int cShot) {
+        for (int i = 0; i < str[0].length; i++) {
+            for (int j = 0; j < str.length; j++) {
+                if (j == cShot - 1 && i == rShot - 1) {
+                    if (str[i][j].equals(" O")) {
+                        str[i][j] = " X";
+                    } else {
+                        str[i][j] = " M";
+                    }
                 }
             }
         }
