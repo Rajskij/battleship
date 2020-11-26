@@ -33,7 +33,9 @@ public class Main {
             printField(field);
         }
         System.out.println("\nThe game starts!\n");
-        printField(field);
+        String[][] fogField = new String[10][10];
+        makeField(fogField);
+        printField(fogField);
         System.out.println("\nTake a shot!\n");
         String shot = sc.next();
         int rowShot = stringToInt(shot);
@@ -46,8 +48,10 @@ public class Main {
             colShot = Integer.parseInt(shot.substring(1));
         }
         fillShot(field, rowShot, colShot);
+        fogField = fogOfWar(field);
+        printField(fogField);
+        System.out.println(field[rowShot - 1][colShot - 1].equals(" X") ? "\nYou hit a ship!\n" : "\nYou missed!\n");
         printField(field);
-        System.out.println(field[rowShot - 1][colShot - 1].equals(" X") ? "\nYou hit a ship!" : "\nYou missed!");
     }
 
     public static int stringToInt(String s) {
@@ -77,6 +81,7 @@ public class Main {
         }
         return str;
     }
+
     public static String[][] fillShot(String[][] str, int rShot, int cShot) {
         for (int i = 0; i < str[0].length; i++) {
             for (int j = 0; j < str.length; j++) {
@@ -90,6 +95,22 @@ public class Main {
             }
         }
         return str;
+    }
+
+    public static String[][] fogOfWar(String[][] str) {
+        String[][] fog = new String[10][10];
+        for (int i = 0; i < str[0].length; i++) {
+            for (int j = 0; j < str.length; j++) {
+                if (str[i][j].equals(" X")) {
+                    fog[i][j] = " X";
+                } else if (str[i][j].equals(" M")) {
+                    fog[i][j] = " M";
+                } else {
+                    fog[i][j] = " ~";
+                }
+            }
+        }
+        return fog;
     }
 
     public static void printField(String[][] str) {
