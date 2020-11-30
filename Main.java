@@ -37,21 +37,60 @@ public class Main {
         makeField(fogField);
         printField(fogField);
         System.out.println("\nTake a shot!\n");
-        String shot = sc.next();
-        int rowShot = stringToInt(shot);
-        int colShot = Integer.parseInt(shot.substring(1));
+        while (checkIfAlive(field)) {
+            String shot = sc.next();
+            int rowShot = stringToInt(shot) - 1;
+            int colShot = Integer.parseInt(shot.substring(1)) - 1;
 
-        while (shot.matches("[K-Z].") || colShot > 10) {
-            System.out.println("\nError! You entered the wrong coordinates! Try again:\n");
-            shot = sc.next();
-            rowShot = stringToInt(shot);
-            colShot = Integer.parseInt(shot.substring(1));
+            while (shot.matches("[K-Z].") || colShot > 10) {
+                System.out.println("\nError! You entered the wrong coordinates! Try again:\n");
+                shot = sc.next();
+                rowShot = stringToInt(shot) - 1;
+                colShot = Integer.parseInt(shot.substring(1)) - 1;
+            }
+            if (field[rowShot][colShot].equals(" O")) {
+                fogField[rowShot][colShot] = " X";
+                field[rowShot][colShot] = " X";
+            } else if (field[rowShot][colShot].equals(" ~")) {
+                fogField[rowShot][colShot] = " M";
+            }
+            printField(fogField);
+            if (checkIfSank(field, rowShot, colShot) && fogField[rowShot][colShot].equals(" X")) {
+                System.out.println("You sank a ship! Specify a new target:");
+            } else {
+                System.out.println(fogField[rowShot][colShot].equals(" X") ? "\nYou hit a ship! Try again:\n"
+                        : "\nYou missed! Try again:\n");
+            }
         }
-        fillShot(field, rowShot, colShot);
-        fogField = fogOfWar(field);
-        printField(fogField);
-        System.out.println(field[rowShot - 1][colShot - 1].equals(" X") ? "\nYou hit a ship!\n" : "\nYou missed!\n");
-        printField(field);
+        System.out.println("You sank the last ship. You won. Congratulations!");
+    }
+    public static boolean checkIfSank(String[][] field, int rs, int cs) {
+        boolean isSank = true;
+        int n = field.length - 1;
+        int up = rs == n ? n : rs + 1;
+        int down = rs == 0 ? 0 : rs - 1;
+        int right = cs == n ? n : cs + 1;
+        int left = cs == 0 ? 0 : cs - 1;
+
+        if (field[rs][right].equals(" O")
+                || field[rs][left].equals(" O")
+                || field[up][cs].equals(" O")
+                || field[down][cs].equals(" O")) {
+            isSank = false;
+        }
+        return isSank;
+    }
+    public static boolean checkIfAlive(String[][] field) {
+        boolean isAlive = false;
+        for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field.length; j++) {
+                if (field[i][j].equals(" O")) {
+                    isAlive = true;
+                    break;
+                }
+            }
+        }
+        return isAlive;
     }
 
     public static int stringToInt(String s) {
@@ -80,37 +119,6 @@ public class Main {
             }
         }
         return str;
-    }
-
-    public static String[][] fillShot(String[][] str, int rShot, int cShot) {
-        for (int i = 0; i < str[0].length; i++) {
-            for (int j = 0; j < str.length; j++) {
-                if (j == cShot - 1 && i == rShot - 1) {
-                    if (str[i][j].equals(" O")) {
-                        str[i][j] = " X";
-                    } else {
-                        str[i][j] = " M";
-                    }
-                }
-            }
-        }
-        return str;
-    }
-
-    public static String[][] fogOfWar(String[][] str) {
-        String[][] fog = new String[10][10];
-        for (int i = 0; i < str[0].length; i++) {
-            for (int j = 0; j < str.length; j++) {
-                if (str[i][j].equals(" X")) {
-                    fog[i][j] = " X";
-                } else if (str[i][j].equals(" M")) {
-                    fog[i][j] = " M";
-                } else {
-                    fog[i][j] = " ~";
-                }
-            }
-        }
-        return fog;
     }
 
     public static void printField(String[][] str) {
