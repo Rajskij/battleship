@@ -8,13 +8,13 @@ public class BattleField {
         System.out.printf("\nPlayer %s, it's your turn:\n", player);
 
         String shot = sc.next();
-        int rowShot = Model.stringToInt(shot) - 1;
+        int rowShot = SupportingFunction.stringToInt(shot) - 1;
         int colShot = Integer.parseInt(shot.substring(1)) - 1;
 
         while (shot.matches("[K-Z].") || colShot > 10) {
             System.out.println("\nError! You entered the wrong coordinates! Try again:\n");
             shot = sc.next();
-            rowShot = Model.stringToInt(shot) - 1;
+            rowShot = SupportingFunction.stringToInt(shot) - 1;
             colShot = Integer.parseInt(shot.substring(1)) - 1;
         }
         if (field[rowShot][colShot].equals(" O")) {
@@ -23,15 +23,15 @@ public class BattleField {
         } else if (field[rowShot][colShot].equals(" ~")) {
             fogField[rowShot][colShot] = " M";
         }
-        if (checkIfSank(field, rowShot, colShot) && fogField[rowShot][colShot].equals(" X")) {
-            System.out.println("You sank a ship! Specify a new target:");
-            Model.promptEnterKey();
-        } else if (!Main.checkIfAlive(field)){
+        if (!SupportingFunction.checkIfAlive(field)){
             System.out.println("You sank the last ship. You won. Congratulations!");
+        } else if (checkIfSank(field, rowShot, colShot) && fogField[rowShot][colShot].equals(" X")) {
+            System.out.println("You sank a ship! Specify a new target:");
+            SupportingFunction.promptEnterKey();
         } else {
             System.out.println(fogField[rowShot][colShot].equals(" X") ? "\nYou hit a ship! Try again:\n"
                     : "\nYou missed! Try again:\n");
-            Model.promptEnterKey();
+            SupportingFunction.promptEnterKey();
         }
     }
 

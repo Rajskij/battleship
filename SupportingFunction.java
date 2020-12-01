@@ -2,12 +2,23 @@ package battleship;
 
 import java.io.IOException;
 
-public class Model {
+public class SupportingFunction {
+    public static boolean checkIfAlive(String[][] field) {
+        boolean isAlive = false;
+        for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field.length; j++) {
+                if (field[i][j].equals(" O")) {
+                    isAlive = true;
+                    break;
+                }
+            }
+        }
+        return isAlive;
+    }
     public static int stringToInt(String s) {
         String val = "ABCDEFGHIJ";
         return val.indexOf(s.charAt(0)) + 1;
     }
-
     public static String[][] makeField(String[][] str) {
         for (int i = 0; i < str.length; i++) {
             for (int j = 0; j < str[0].length; j++) {

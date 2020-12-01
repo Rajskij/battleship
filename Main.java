@@ -11,39 +11,26 @@ public class Main {
         MakeField.CreateField(player1Field, 1);
         MakeField.CreateField(player2Field, 2);
 
-        Model.makeField(player1FogField);
-        Model.makeField(player2FogField);
+        SupportingFunction.makeField(player1FogField);
+        SupportingFunction.makeField(player2FogField);
 
         while (true) {
-            if (!checkIfAlive(player1Field)) {
+            if (!SupportingFunction.checkIfAlive(player1Field)) {
                 break;
             } else {
-                Model.printField(player1FogField);
+                SupportingFunction.printField(player1FogField);
                 System.out.println("---------------------");
-                Model.printField(player1Field);
+                SupportingFunction.printField(player1Field);
                 BattleField.makeShot(player2Field, player1FogField, 1);
             }
-            if (!checkIfAlive(player2Field)) {
+            if (!SupportingFunction.checkIfAlive(player2Field)) {
                 break;
             } else {
-                Model.printField(player2FogField);
+                SupportingFunction.printField(player2FogField);
                 System.out.println("---------------------");
-                Model.printField(player2Field);
+                SupportingFunction.printField(player2Field);
                 BattleField.makeShot(player1Field, player2FogField, 2);
             }
         }
-        System.out.println("You sank the last ship. You won. Congratulations!");
-    }
-    public static boolean checkIfAlive(String[][] field) {
-        boolean isAlive = false;
-        for (int i = 0; i < field.length; i++) {
-            for (int j = 0; j < field.length; j++) {
-                if (field[i][j].equals(" O")) {
-                    isAlive = true;
-                    break;
-                }
-            }
-        }
-        return isAlive;
     }
 }
